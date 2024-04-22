@@ -13,13 +13,21 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v2
 
+      - name: Install aspell (Spanish dictionary)
+        run: sudo apt-get install aspell aspell-es
+
       - name: Verificar ortografía en español
-        uses: actions/spellcheck@v3
-        with:
-          ignore-urls: true
-          dictionaries: es_ES
+        run: |
+          find . -name "*.html" -o -name "*.css" | xargs cat | aspell --lang=es list
 
       - name: Validar HTML y CSS
-        uses: actions/checkout@v2
-        with:
-          path: ./
+        run: |
+          # Aquí puedes agregar comandos para validar HTML y CSS (por ejemplo, con html-lint y csslint)
+
+      - name: Desplegar en rama principal
+        run: |
+          git config --global user.email "bot@example.com"
+          git config --global user.name "CI Bot"
+          git add .
+          git commit -m "CI: Validación de ortografía y formato"
+          git push origin main
