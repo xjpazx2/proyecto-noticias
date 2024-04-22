@@ -24,10 +24,18 @@ jobs:
         run: |
           # Aquí puedes agregar comandos para validar HTML y CSS (por ejemplo, con html-lint y csslint)
 
-      - name: Desplegar en rama principal
+      - name: Configurar nombre de usuario de Git
+        run: git config --global user.name "CI Bot"
+
+      - name: Verificar si hay cambios para commit
+        id: check_changes
+        run: echo ::set-output name=changed::$(if git diff --quiet; then echo "false"; else echo "true"; fi)
+
+      - name: Commit y push si hay cambios
+        if: steps.check_changes.outputs.changed == 'true'
         run: |
           git config --global user.email "bot@example.com"
-          git config --global user.name "CI Bot"
           git add .
           git commit -m "CI: Validación de ortografía y formato"
           git push origin main
+
