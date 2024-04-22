@@ -1,0 +1,25 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v2
+
+      - name: Verificar ortografía en español
+        uses: actions/spellcheck@v3
+        with:
+          ignore-urls: true
+          dictionaries: es_ES
+
+      - name: Validar HTML y CSS
+        uses: actions/checkout@v2
+        with:
+          path: ./
