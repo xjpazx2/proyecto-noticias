@@ -22,7 +22,8 @@ jobs:
 
       - name: Validar HTML y CSS
         run: |
-          # Aquí puedes agregar comandos para validar HTML y CSS (por ejemplo, con html-lint y csslint)
+          npm install -g html-validate
+          html-validate "**/*.html" --config .htmlvalidate.json
 
       - name: Configurar nombre de usuario de Git
         run: git config --global user.name "CI Bot"
@@ -38,4 +39,5 @@ jobs:
           git add .
           git commit -m "CI: Validación de ortografía y formato"
           git push origin main
+
 
