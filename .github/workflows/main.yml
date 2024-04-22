@@ -13,17 +13,22 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v2
 
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Install aspell (Spanish dictionary)
         run: sudo apt-get install aspell aspell-es
 
-      - name: Verificar ortografía en español
+      - name: Verificar ortografía en español y Validar HTML/CSS
         run: |
+          # Verificar ortografía en español
           find . -name "*.html" -o -name "*.css" | xargs cat | aspell --lang=es list
 
-      - name: Validar HTML y CSS
-        run: |
-          npm install -g html-validate
-          html-validate "**/*.html" --config .htmlvalidate.json
+          # Instalar html-validate localmente y validar HTML/CSS
+          npm install html-validate
+          npx html-validate "**/*.html" --config .htmlvalidate.json
 
       - name: Configurar nombre de usuario de Git
         run: git config --global user.name "CI Bot"
@@ -39,5 +44,4 @@ jobs:
           git add .
           git commit -m "CI: Validación de ortografía y formato"
           git push origin main
-
 
